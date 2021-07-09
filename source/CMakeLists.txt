@@ -68,8 +68,8 @@ if (VERBOSE)
     endforeach()
 endif ()
 
-add_library (tinythreadpp ${TINYTHREAD_LIB_TYPE} ${SOURCE_FILES})
 set (BINARY_NAME "tinythreadpp")
+add_library (${BINARY_NAME} ${TINYTHREAD_LIB_TYPE} ${SOURCE_FILES})
 
 #---------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ endif ()
 
 target_compile_options (${BINARY_NAME} PRIVATE ${COMMON_COMPILE_OPTIONS}
                                                ${COMMON_DEBUG_COMPILE_OPTTIONS})
-set_property (TARGET ${BINARY_NAME} PROPERTY CXX_STANDARD 14)
+set_property (TARGET ${BINARY_NAME} PROPERTY CXX_STANDARD 11)
 
 #---------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.16)
 project(tinythread_test)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set (CMAKE_CXX_STANDARD 11)
 
 add_subdirectory("./../source" tinythreadpp)
 
@@ -41,9 +41,9 @@ endif ()
 
 macro(add_example name)
     add_executable(${name} ${name}.cpp)
+    set_property (TARGET ${name} PROPERTY CXX_STANDARD 11)
 
     if (NOT MSVC)
-        target_compile_options (${name} PRIVATE "-std=c++11")
         add_definitions("--pedantic")
 
         target_compile_options (${name} PRIVATE "-Wno-missing-braces"
