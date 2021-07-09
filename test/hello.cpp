@@ -29,17 +29,19 @@ using namespace tthread;
 
 
 // This is the child thread function
-void HelloThread(void * aArg)
+void
+HelloThread(void* aArg)
 {
-  cout << "Hello world!" << endl;
+    cout << "Hello world!" << endl;
 }
 
 // This is the main program (i.e. the main thread)
-int main()
+int
+main()
 {
-  // Start the child thread
-  thread t(HelloThread, 0);
+    // Start the child thread
+    thread t(HelloThread, 0);
 
-  // Wait for the thread to finish
-  t.join();
+    // Wait for the thread to finish
+    t.join();
 }
