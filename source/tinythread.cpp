@@ -137,8 +137,10 @@ _pthread_t_to_ID(const pthread_t& aHandle)
     static unsigned long int                      idCount(1);
 
     lock_guard<mutex> guard(idMapLock);
+
     if (idMap.find(aHandle) == idMap.end())
         idMap[aHandle] = idCount++;
+
     return thread::id(idMap[aHandle]);
 }
 
@@ -197,8 +199,7 @@ thread::wrapper_function(void* aArg)
     try {
         // Call the actual client thread function
         tw->run();
-    }
-    catch (...) {
+    } catch (...) {
         // Uncaught exceptions will terminate the application (default behavior
         // according to C++11)
         std::terminate();
@@ -309,6 +310,7 @@ thread::get_id() const
 {
     if (!joinable())
         return id();
+
 #if defined(_TTHREAD_WIN32_)
     return id((unsigned long int) mWin32ThreadID);
 #elif defined(_TTHREAD_POSIX_)
@@ -322,6 +324,7 @@ thread::hardware_concurrency()
 #if defined(_TTHREAD_WIN32_)
     SYSTEM_INFO si;
     GetSystemInfo(&si);
+
     return (int) si.dwNumberOfProcessors;
 #elif defined(_SC_NPROCESSORS_ONLN)
     return (int)sysconf(_SC_NPROCESSORS_ONLN);

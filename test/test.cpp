@@ -128,11 +128,14 @@ void
 ThreadCondition2(void* aArg)
 {
     cout << " Wating..." << flush;
+
     lock_guard<mutex> lock(gMutex);
+
     while (gCount > 0) {
         cout << "." << flush;
         gCond.wait(gMutex);
     }
+
     cout << "." << endl;
 }
 

@@ -46,7 +46,9 @@ class Pixel
 {
 public:
     Pixel() :
-          b(0), g(0), r(0)
+          b(0),
+          g(0),
+          r(0)
     { }
 
     Pixel(unsigned char red, unsigned char green, unsigned char blue)
@@ -132,10 +134,14 @@ public:
     int NextRow()
     {
         lock_guard<mutex> guard(mMutex);
+
         if (mNextRow >= mImage->Height())
             return -1;
+
         int result = mNextRow;
+
         ++mNextRow;
+
         return result;
     }
 
@@ -153,6 +159,7 @@ Iterate(const double& cre, const double& cim, int aIterMax)
     double zim     = 0.0;
     int    n       = 0;
     double absZSqr = 0.0;
+
     while ((absZSqr < 4.0) && (n < aIterMax)) {
         double tmp = zre * zre - zim * zim + cre;
         zim     = 2.0 * zre * zim + cim;
@@ -160,10 +167,12 @@ Iterate(const double& cre, const double& cim, int aIterMax)
         absZSqr = zre * zre + zim * zim;
         ++n;
     }
+
     if (n >= aIterMax)
         return Pixel(0, 0, 0);
     else {
         double nSmooth = n + 1 - log(log(sqrt(absZSqr))) / log(2.0);
+
         return Pixel(
               (unsigned char)(128.0 - 127.0 * cos(0.02 * nSmooth + 0.3)),
               (unsigned char)(128.0 - 127.0 * cos(0.016 * nSmooth + 1.2)),
@@ -202,6 +211,7 @@ CalcThread(void* arg)
         Pixel* line = &(*img)[y * img->Width()];
         double   cim = y * yStep + yMin;
         double   cre = xMin;
+
         for (int x   = 0; x < img->Width(); ++x) {
             *line++ = Iterate(cre, cim, MAND_MAX_ITER);
             cre += xStep;
@@ -234,6 +244,7 @@ main(int argc, char** argv)
     int numThreads;
     if (!singleThreaded) {
         numThreads     = thread::hardware_concurrency();
+
         if (numThreads < 1)
             numThreads = 1;
     } else
@@ -241,7 +252,9 @@ main(int argc, char** argv)
 
     // Start calculation threads (we run one thread on each processor core)
     cout << "Running " << numThreads << " calculation thread(s)..." << flush;
+
     list<thread*> threadList;
+
     for (int      i = 0; i < numThreads; ++i) {
         thread* t = new thread(CalcThread, (void*)&dispatcher);
         threadList.push_back(t);
@@ -253,6 +266,7 @@ main(int argc, char** argv)
         t->join();
         delete t;
     }
+
     cout << "done!" << endl;
 
     // Write the final image to a file
