@@ -1,10 +1,12 @@
 # TinyThread++ v1.1 #
+
 ---------------------
 
 Forked from [http://tinythreadpp.bitsnbites.eu](http://tinythreadpp.bitsnbites.eu)
 
 
 ## About ##
+
 -----------
 
 `TinyThread++` is a minimalist, portable, threading library for C++, intended to
@@ -17,6 +19,7 @@ See the documentation in the `doc/html` directory for more information.
 
 
 ## Using TinyThread++ ##
+
 ------------------------
 
 To use `TinyThread++` in your own project, just add `tinythread.cpp` and
@@ -35,6 +38,7 @@ If you wish to use the `fast_mutex` class, inlude `fast_mutex.h`:
 
 
 ## Building the test programs ##
+
 --------------------------------
 
 From the test folder, issue one of the following commands:
@@ -52,6 +56,7 @@ Windows/MS Visual Studio:
 - nmake /f Makefile.msvc
 
 ## Building the documentation ##
+
 --------------------------------
 
 From the doc folder, run the following command:
@@ -60,3 +65,12 @@ From the doc folder, run the following command:
 doxygen Doxyfile
 ```
 
+## Links ##
+
+-----------
+
+@see [Compiling](./INSTALL.md)
+
+@see [Change log](./CHANGE_LOG.md)
+
+@see [License](./LICENSE.md)
