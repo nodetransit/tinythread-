@@ -1,7 +1,7 @@
 # TinyThread++ v1.1 #
 ---------------------
 
-http://tinythreadpp.bitsnbites.eu
+Forked from [http://tinythreadpp.bitsnbites.eu](http://tinythreadpp.bitsnbites.eu)
 
 
 ## About ##
@@ -41,7 +41,7 @@ From the test folder, issue one of the following commands:
 
 Linux, Mac OS X, OpenSolaris etc:
 
-- make   (you may need to use gmake on some systems)
+- make (you may need to use gmake on some systems)
 
 Windows/MinGW:
 
@@ -51,4 +51,12 @@ Windows/MS Visual Studio:
 
 - nmake /f Makefile.msvc
 
+## Building the documentation ##
+--------------------------------
+
+From the doc folder, run the following command:
+
+```sh
+doxygen Doxyfile
+```
 
