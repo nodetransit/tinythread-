@@ -68,7 +68,7 @@ if (VERBOSE)
     endforeach()
 endif ()
 
-set (BINARY_NAME "tinythreadpp")
+set (BINARY_NAME "tthreadpp")
 add_library (${BINARY_NAME} ${TINYTHREAD_LIB_TYPE} ${SOURCE_FILES})
 
 #---------------------------------------------------------------------
