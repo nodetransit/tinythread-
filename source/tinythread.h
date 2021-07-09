@@ -679,7 +679,7 @@ public:
     template<class _Rep2>
     explicit duration(const _Rep2& r) :
           rep_(r)
-    { };
+    { }
 
     /// Return the value of the duration object.
     rep count() const
