@@ -72,7 +72,7 @@ void
 ThreadLock(void* aArg)
 {
     for (int i = 0; i < 10000; ++i) {
-        lock_guard <mutex> lock(gMutex);
+        lock_guard<mutex> lock(gMutex);
         ++gCount;
     }
 }
@@ -82,7 +82,7 @@ void
 ThreadLock2(void* aArg)
 {
     for (int i = 0; i < 10000; ++i) {
-        lock_guard <fast_mutex> lock(gFastMutex);
+        lock_guard<fast_mutex> lock(gFastMutex);
         ++gCount;
     }
 }
@@ -91,7 +91,7 @@ ThreadLock2(void* aArg)
 void
 ThreadCondition1(void* aArg)
 {
-    lock_guard <mutex> lock(gMutex);
+    lock_guard<mutex> lock(gMutex);
     --gCount;
     gCond.notify_all();
 }
@@ -101,11 +101,14 @@ void
 ThreadCondition2(void* aArg)
 {
     cout << " Wating..." << flush;
-    lock_guard <mutex> lock(gMutex);
+
+    lock_guard<mutex> lock(gMutex);
+
     while (gCount > 0) {
         cout << "." << flush;
         gCond.wait(gMutex);
     }
+
     cout << "." << endl;
 }
 
@@ -178,11 +181,11 @@ main()
     cout << endl << "PART IV: Mutex locking (100 threads x 10000 iterations)" << endl;
     {
         // Clear the global counter.
-        gCount = 0;
+        gCount          = 0;
 
         // Start a bunch of child threads
-        list < thread * > threadList;
-        for (int i = 0; i < 100; ++i)
+        list<thread*> threadList;
+        for (int      i = 0; i < 100; ++i)
             threadList.push_back(new thread(ThreadLock, 0));
 
         // Wait for the threads to finish
@@ -201,11 +204,11 @@ main()
     cout << endl << "PART V: Fast mutex locking (100 threads x 10000 iterations)" << endl;
     {
         // Clear the global counter.
-        gCount = 0;
+        gCount          = 0;
 
         // Start a bunch of child threads
-        list < thread * > threadList;
-        for (int i = 0; i < 100; ++i)
+        list<thread*> threadList;
+        for (int      i = 0; i < 100; ++i)
             threadList.push_back(new thread(ThreadLock2, 0));
 
         // Wait for the threads to finish
@@ -224,15 +227,15 @@ main()
     cout << endl << "PART VI: Condition variable (40 + 1 threads)" << endl;
     {
         // Set the global counter to the number of threads to run.
-        gCount = 40;
+        gCount          = 40;
 
         // Start the waiting thread (it will wait for gCount to reach zero).
         thread t1(ThreadCondition2, 0);
 
         // Start a bunch of child threads (these will decrease gCount by 1 when they
         // finish)
-        list < thread * > threadList;
-        for (int i = 0; i < 40; ++i)
+        list<thread*> threadList;
+        for (int      i = 0; i < 40; ++i)
             threadList.push_back(new thread(ThreadCondition1, 0));
 
         // Wait for the waiting thread to finish
@@ -251,8 +254,8 @@ main()
     cout << endl << "PART VII: Yield (40 + 1 threads)" << endl;
     {
         // Start a bunch of child threads
-        list < thread * > threadList;
-        for (int i = 0; i < 40; ++i)
+        list<thread*> threadList;
+        for (int      i = 0; i < 40; ++i)
             threadList.push_back(new thread(ThreadYield, 0));
 
         // Yield...

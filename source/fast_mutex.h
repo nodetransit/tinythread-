@@ -90,7 +90,11 @@ class fast_mutex
 public:
     /// Constructor.
 #if defined(_FAST_MUTEX_ASM_)
-    fast_mutex() : mLock(0) {}
+
+    fast_mutex() :
+          mLock(0)
+    { }
+
 #else
 
     fast_mutex()
@@ -127,16 +131,15 @@ public:
 #if defined(_FAST_MUTEX_ASM_)
         bool gotLock;
         do {
-          gotLock = try_lock();
-          if(!gotLock)
-          {
+            gotLock = try_lock();
+            if (!gotLock) {
 #if defined(_TTHREAD_WIN32_)
-            Sleep(0);
+                Sleep(0);
 #elif defined(_TTHREAD_POSIX_)
-            sched_yield();
+                sched_yield();
 #endif
-          }
-        } while(!gotLock);
+            }
+        } while (!gotLock);
 #else
 #if defined(_TTHREAD_WIN32_)
         EnterCriticalSection(&mHandle);
@@ -157,12 +160,12 @@ public:
         int oldLock;
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
         asm volatile (
-          "movl $1,%%eax\n\t"
-          "xchg %%eax,%0\n\t"
-          "movl %%eax,%1\n\t"
-          : "=m" (mLock), "=m" (oldLock)
-          :
-          : "%eax", "memory"
+        "movl $1,%%eax\n\t"
+        "xchg %%eax,%0\n\t"
+        "movl %%eax,%1\n\t"
+        : "=m" (mLock), "=m" (oldLock)
+        :
+        : "%eax", "memory"
         );
 #elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
         int *ptrLock = &mLock;
@@ -206,11 +209,11 @@ public:
 #if defined(_FAST_MUTEX_ASM_)
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
         asm volatile (
-          "movl $0,%%eax\n\t"
-          "xchg %%eax,%0\n\t"
-          : "=m" (mLock)
-          :
-          : "%eax", "memory"
+        "movl $0,%%eax\n\t"
+        "xchg %%eax,%0\n\t"
+        : "=m" (mLock)
+        :
+        : "%eax", "memory"
         );
 #elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
         int *ptrLock = &mLock;

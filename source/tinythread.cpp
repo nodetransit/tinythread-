@@ -137,8 +137,10 @@ _pthread_t_to_ID(const pthread_t& aHandle)
     static unsigned long int                      idCount(1);
 
     lock_guard<mutex> guard(idMapLock);
+
     if (idMap.find(aHandle) == idMap.end())
         idMap[aHandle] = idCount++;
+
     return thread::id(idMap[aHandle]);
 }
 
@@ -172,8 +174,7 @@ thread::wrapper_function(void* aArg)
     try {
         // Call the actual client thread function
         ti->mFunction(ti->mArg);
-    }
-    catch (...) {
+    } catch (...) {
         // Uncaught exceptions will terminate the application (default behavior
         // according to C++11)
         std::terminate();
@@ -181,6 +182,7 @@ thread::wrapper_function(void* aArg)
 
     // The thread is no longer executing
     lock_guard<mutex> guard(ti->mThread->mDataMutex);
+
     ti->mThread->mNotAThread = true;
 
     // The thread is responsible for freeing the startup information
@@ -197,6 +199,7 @@ thread::thread(void (* aFunction)(void*), void* aArg)
     // Fill out the thread startup information (passed to the thread wrapper,
     // which will eventually free it)
     _thread_start_info* ti = new _thread_start_info;
+
     ti->mFunction = aFunction;
     ti->mArg      = aArg;
     ti->mThread   = this;
@@ -242,8 +245,11 @@ bool
 thread::joinable() const
 {
     mDataMutex.lock();
+
     bool result = !mNotAThread;
+
     mDataMutex.unlock();
+
     return result;
 }
 
@@ -251,6 +257,7 @@ void
 thread::detach()
 {
     mDataMutex.lock();
+
     if (!mNotAThread) {
 #if defined(_TTHREAD_WIN32_)
         CloseHandle(mHandle);
@@ -259,6 +266,7 @@ thread::detach()
 #endif
         mNotAThread = true;
     }
+
     mDataMutex.unlock();
 }
 
@@ -267,6 +275,7 @@ thread::get_id() const
 {
     if (!joinable())
         return id();
+
 #if defined(_TTHREAD_WIN32_)
     return id((unsigned long int) mWin32ThreadID);
 #elif defined(_TTHREAD_POSIX_)
@@ -280,9 +289,10 @@ thread::hardware_concurrency()
 #if defined(_TTHREAD_WIN32_)
     SYSTEM_INFO si;
     GetSystemInfo(&si);
+
     return (int) si.dwNumberOfProcessors;
 #elif defined(_SC_NPROCESSORS_ONLN)
-    return (int) sysconf(_SC_NPROCESSORS_ONLN);
+    return (int)sysconf(_SC_NPROCESSORS_ONLN);
 #elif defined(_SC_NPROC_ONLN)
     return (int) sysconf(_SC_NPROC_ONLN);
 #else
