@@ -61,13 +61,6 @@ find_package(Threads REQUIRED)
 
 file (GLOB_RECURSE SOURCE_FILES "." "*.cpp")
 
-if (VERBOSE)
-    message(STATUS "${CMAKE_PROJECT_NAME} files:")
-    foreach (_variableName ${SOURCE_FILES})
-        message(STATUS "  - ${_variableName}")
-    endforeach()
-endif ()
-
 set (BINARY_NAME "tthreadpp")
 add_library (${BINARY_NAME} ${TINYTHREAD_LIB_TYPE} ${SOURCE_FILES})
 
@@ -128,10 +121,6 @@ if (NOT DEBUG)
     endif ()
 endif ()
 
-target_compile_options (${BINARY_NAME} PRIVATE ${COMMON_COMPILE_OPTIONS}
-                                               ${COMMON_DEBUG_COMPILE_OPTTIONS})
-set_property (TARGET ${BINARY_NAME} PROPERTY CXX_STANDARD 11)
-
 #---------------------------------------------------------------------
 
 if (${TINYTHREAD_LIB_TYPE} STREQUAL "STATIC")
@@ -173,12 +162,16 @@ elseif (${TINYTHREAD_LIB_TYPE} STREQUAL "SHARED")
     #endif ()
 
     set_target_properties(${BINARY_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
-    set_target_properties(${BINARY_NAME} PROPERTIES SOVERSION 0)
+    set_target_properties(${BINARY_NAME} PROPERTIES SOVERSION 1)
 endif ()
 
 if (LINUX)
     target_link_libraries (${BINARY_NAME} "pthread")
 endif ()
+
+target_compile_options (${BINARY_NAME} PRIVATE ${COMMON_COMPILE_OPTIONS}
+                        ${COMMON_DEBUG_COMPILE_OPTTIONS})
+set_property (TARGET ${BINARY_NAME} PROPERTY CXX_STANDARD 11)
 
 target_include_directories(${BINARY_NAME}
                            PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"

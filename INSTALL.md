@@ -15,7 +15,7 @@ make
 
 | option | default | | |
 | --- | --- | --- | --- |
-| DEBUG | 0 | compile with debug symbols | automatically set when `CMAKE_BUILD_TYPE` is `Debug` |
-| TINYTHREAD_EXPORT_LIB | 1 | compile as a shared library | |
-| VERBOSE | 0 | print compile and link commands during make | |
+| DEBUG | OFF | compile with debug symbols | automatically set when `CMAKE_BUILD_TYPE` is `Debug` |
+| TINYTHREAD_EXPORT_LIB | ON | compile as a shared library | |
+| VERBOSE | OFF | print compile and link commands during make | |
 
