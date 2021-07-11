@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.16)
-project (tinythread VERSION 1.1.0 DESCRIPTION "Minimalist, portable threading library.")
+project (tinythread VERSION 1.2.1 DESCRIPTION "Minimalist, portable threading library.")
 
 include (CheckIncludeFiles)
 

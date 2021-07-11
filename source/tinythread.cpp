@@ -270,6 +270,17 @@ thread::detach()
     mDataMutex.unlock();
 }
 
+void
+thread::kill()
+{
+#if defined(_TTHREAD_WIN32_)
+    TerminateThread(mHandle, -1);
+    CloseHandle(mHandle);
+#elif defined(_TTHREAD_POSIX_)
+    pthread_kill(mHandle, SIGKILL);
+#endif
+}
+
 thread::id
 thread::get_id() const
 {

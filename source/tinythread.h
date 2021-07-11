@@ -546,6 +546,11 @@ public:
     /// ends execution, any owned resources are released.
     void detach();
 
+    /**
+     * @brief Kill the thread.
+     */
+    void kill();
+
     /// Return the thread ID of a thread object.
     id get_id() const;
 
@@ -567,9 +572,9 @@ public:
     _TTHREAD_DISABLE_ASSIGNMENT(thread)
 
 private:
-    native_handle_type mHandle;   ///< Thread handle.
-    mutable mutex      mDataMutex;     ///< Serializer for access to the thread private data.
-    bool               mNotAThread;             ///< True if this object is not a thread of execution.
+    native_handle_type mHandle;      ///< Thread handle.
+    mutable mutex      mDataMutex;   ///< Serializer for access to the thread private data.
+    bool               mNotAThread;  ///< True if this object is not a thread of execution.
 #if defined(_TTHREAD_WIN32_)
     unsigned int mWin32ThreadID;  ///< Unique thread ID (filled out by _beginthreadex).
 #endif

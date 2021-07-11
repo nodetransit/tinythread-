@@ -2,6 +2,9 @@
 
 -------------
 
+- v1.2 - 2021.07.11
+    - Added `thread::kill()`
+    
 - v1.1 - 2012.05.07
     - Added `thread::detach()`.
 
