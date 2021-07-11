@@ -2,6 +2,9 @@
 
 -------------
 
+- v1.2 - 2021.07.11
+    - Added `thread::kill()`
+
 - v1.2 - 2012.11.07
     - Fixed dangling references bug in `thread::detach()` mechanism.
     - Added `atomic<T>` class.

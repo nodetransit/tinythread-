@@ -884,6 +884,11 @@ public:
     /// ends execution, any owned resources are released.
     void detach();
 
+    /**
+     * @brief Kill the thread.
+     */
+    void kill();
+
     /// Return the thread ID of a thread object.
     id get_id() const;
 
