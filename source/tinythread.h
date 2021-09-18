@@ -89,7 +89,7 @@ freely, subject to the following restrictions:
 /// TinyThread++ version (major number).
 #define TINYTHREAD_VERSION_MAJOR 1
 /// TinyThread++ version (minor number).
-#define TINYTHREAD_VERSION_MINOR 1
+#define TINYTHREAD_VERSION_MINOR 2
 /// TinyThread++ version (full version).
 #define TINYTHREAD_VERSION (TINYTHREAD_VERSION_MAJOR * 100 + TINYTHREAD_VERSION_MINOR)
 
