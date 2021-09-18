@@ -49,6 +49,9 @@ endif ()
 if (WIN32)
     # operating system for the spoiled and the losers
     set (LOSER ON)
+    message (STATUS "No exports, forcing static linkage.")
+    set (TINYTHREAD_EXPORT_LIB OFF)
+    set (TINYTHREAD_LIB_TYPE STATIC)
 endif ()
 # no support for the weirdos using APPLE
 
@@ -56,6 +59,27 @@ find_package(Threads REQUIRED)
 #if (NOT Threads)
 #    message (FATAL_ERROR "cannot find pthreads")
 #endif ()
+
+if (LOSE)
+    if (MSVC)
+        set (DLLTOOL OFF)
+    else ()
+        message (STATUS "Detecting dlltool")
+        find_program (DLLTOOL dlltool)
+        if (DLLTOOL)
+            message (STATUS "  Found dlltool: ${DLLTOOL}")
+        else ()
+            message (WARNING "dlltool not found. Skipping import library generation.")
+        endif ()
+    endif ()
+
+    if (MINGW)
+        set (CMAKE_RC_COMPILER_INIT windres)
+        enable_language (RC)
+        set (CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> <DEFINES> -o <OBJECT> -i <SOURCE>")
+    endif ()
+
+endif ()
 
 #---------------------------------------------------------------------
 
