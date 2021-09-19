@@ -87,7 +87,7 @@ macro(add_example name)
         endif ()
     endif ()
 
-    target_link_libraries(${name} "tinythreadpp")
+    target_link_libraries(${name} "tthreadpp")
 endmacro()
 
 #---------------------------------------------------------------------
