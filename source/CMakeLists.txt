@@ -33,6 +33,8 @@ if (VERBOSE)
     set (CMAKE_VERBOSE_MAKEFILE ON)
 endif ()
 
+option (TINYTHREAD_COMPILE_ASM "Compile with assembly optimizations." OFF)
+
 option (TINYTHREAD_EXPORT_LIB "Build Shared Libraries." ON)
 if (TINYTHREAD_EXPORT_LIB)
     set (TINYTHREAD_LIB_TYPE SHARED)
@@ -118,13 +120,13 @@ if (DEBUG OR DEBUGINFO)
 
     if (NOT MSVC)
         add_definitions (-g3
-                         -gz=zlib
+                         #-gz=zlib
                          -fdiagnostics-show-option
                          -femit-class-debug-always
                          -fvar-tracking
                          -fmax-errors=3)
     else ()
-        add_definitions ("-ZI")
+        add_definitions ("-Zi")
     endif ()
 endif ()
 
@@ -145,11 +147,15 @@ if (NOT DEBUG)
     endif ()
 endif ()
 
+if (TINYTHREAD_COMPILE_ASM)
+    add_definitions ("-D_TTHREAD_COMPILE_WITH_ASM_")
+endif ()
+
 #---------------------------------------------------------------------
 
 if (${TINYTHREAD_LIB_TYPE} STREQUAL "STATIC")
-    list (APPEND COMMON_DEBUG_COMPILE_OPTTIONS "-fPIC"
-          )
+    set_property(TARGET ${BINARY_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+    #list (APPEND COMMON_DEBUG_COMPILE_OPTTIONS "-fPIC")
 elseif (${TINYTHREAD_LIB_TYPE} STREQUAL "SHARED")
     if (LOSER)
         set (CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)

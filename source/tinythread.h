@@ -113,11 +113,13 @@ freely, subject to the following restrictions:
 #endif
 
 // Check if we can support the assembly language atomic operations?
-#if (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))) || \
-    (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))) || \
-    (defined(__GNUC__) && (defined(__ppc__)))
+#ifdef _TTHREAD_COMPILE_WITH_ASM_
+#   if (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))) || \
+       (defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))) || \
+       (defined(__GNUC__) && (defined(__ppc__)))
 #
-#   define _TTHREAD_HAS_ASM_ATOMICS_
+#         define _TTHREAD_HAS_ASM_ATOMICS_
+#   endif
 #endif
 
 // Macro for disabling assignments of objects.
@@ -583,7 +585,7 @@ public:
         return static_cast<bool>(__sync_lock_test_and_set(&mFlag, 1));
 #elif defined(_TTHREAD_HAS_ASM_ATOMICS_)
         int result;
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#   if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
         asm volatile (
           "movl $1,%%eax\n\t"
           "xchg %%eax,%0\n\t"
@@ -592,7 +594,7 @@ public:
           :
           : "%eax", "memory"
         );
-#elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
+#   elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
         int *ptrFlag = &mFlag;
         __asm {
           mov eax,1
@@ -600,7 +602,7 @@ public:
           xchg eax,[ecx]
           mov result,eax
         }
-#elif defined(__GNUC__) && (defined(__ppc__))
+#   elif defined(__GNUC__) && (defined(__ppc__))
         int newFlag = 1;
         asm volatile (
           "\n1:\n\t"
@@ -615,7 +617,7 @@ public:
           : "r" (&mFlag), "r" (newFlag)
           : "cr0", "memory"
         );
-#endif
+#   endif
         return static_cast<bool>(result);
 #else
         lock_guard<mutex> guard(mLock);
@@ -632,7 +634,7 @@ public:
 #if defined(_TTHREAD_HAS_ATOMIC_BUILTINS_)
         __sync_lock_release(&mFlag);
 #elif defined(_TTHREAD_HAS_ASM_ATOMICS_)
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#   if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
         asm volatile (
           "movl $0,%%eax\n\t"
           "xchg %%eax,%0\n\t"
@@ -640,20 +642,20 @@ public:
           :
           : "%eax", "memory"
         );
-#elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
+#   elif defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
         int *ptrFlag = &mFlag;
         __asm {
           mov eax,0
           mov ecx,ptrFlag
           xchg eax,[ecx]
         }
-#elif defined(__GNUC__) && (defined(__ppc__))
+#   elif defined(__GNUC__) && (defined(__ppc__))
         asm volatile (
           "sync\n\t"  // Replace with lwsync where possible?
           : : : "memory"
         );
         mFlag = 0;
-#endif
+#   endif
 #else
         lock_guard<mutex> guard(mLock);
         mFlag = 0;
